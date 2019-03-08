@@ -1,0 +1,3 @@
+[submodule "NaMiLib"]
+	path = NaMiLib
+	url = https://github.com/chschenk/NaMiLib.git
