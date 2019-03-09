@@ -1,3 +1,6 @@
 [submodule "NaMiLib"]
 	path = NaMiLib
 	url = https://github.com/chschenk/NaMiLib.git
+[submodule "sepawriter"]
+	path = sepawriter
+	url = https://github.com/perrich/sepawriter.git
