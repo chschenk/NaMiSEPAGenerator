@@ -89,7 +89,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NaMiLib\NaMiLib.csproj">
+    <ProjectReference Include="..\NaMiLib\NaMiLib.csproj">
       <Project>{e4eb813e-35fd-42d0-9def-3795484b5eb3}</Project>
       <Name>NaMiLib</Name>
     </ProjectReference>
