@@ -91,7 +91,8 @@ namespace NaMiSEPAGenerator
                     return;
                 }
 
-
+                List<string> transactions = new List<string>();
+                transactions.Add("Debtor;IBAN;Mandatsreferenz;Verwendungszweck;Betrag");
                 foreach (NaMiMitglied m in task.Result)
                 {
                     if (!(m.kontoverbindung.iban == null || m.kontoverbindung.bic == null || m.kontoverbindung.kontoinhaber == null))
@@ -111,14 +112,22 @@ namespace NaMiSEPAGenerator
                                 transaction.RemittanceInformation = "DPSG Beitrag fuer " + NormalizeString(m.vorname) + " " + NormalizeString(m.nachname);
                                 transaction.Amount = GetAmount(mPIban[transaction.Debtor.Iban], m);
                                 transfer.AddDebitTransfer(transaction);
+                                transactions.Add(String.Format("{0};{1};{2};{3};{4}", transaction.Debtor.Name, transaction.Debtor.Iban, transaction.MandateIdentification, transaction.RemittanceInformation, transaction.Amount.ToString()));
                             }
                         }
                         else
                             skipped.Add(m);
                 }
-                using(StreamWriter sw = new StreamWriter(new FileStream(sfd.FileName, FileMode.Create), new System.Text.UTF8Encoding(false)))
+                using (StreamWriter sw = new StreamWriter(new FileStream(sfd.FileName, FileMode.Create), new System.Text.UTF8Encoding(false)))
                 {
                     sw.Write(transfer.AsXmlString());
+                }
+                using (StreamWriter sw = new StreamWriter(new FileStream(sfd.FileName + ".Transactions.csv", FileMode.Create), new System.Text.UTF8Encoding(false)))
+                {
+                    foreach (string line in transactions)
+                    {
+                        sw.WriteLine(line);
+                    }
                 }
                 if (skipped.Count > 0)
                 {
@@ -179,7 +188,7 @@ namespace NaMiSEPAGenerator
                 return decimal.Parse(txtBeitrag3.Text);
             else if (anzMitglieder > 1)
                 return decimal.Parse(txtBeitrag2.Text);
-            else if (mitglied.beitragsartId[0]==2)
+            else if (mitglied.beitragsartId[0] == 2)
                 return decimal.Parse(txtBeitrag2.Text);
             else
                 return decimal.Parse(txtBeitrag1.Text);
